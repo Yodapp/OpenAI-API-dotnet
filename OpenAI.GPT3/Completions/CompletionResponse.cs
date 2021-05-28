@@ -48,7 +48,7 @@ namespace OpenAI.GPT3
 	/// <summary>
 	/// Represents a result from calling the Completion API
 	/// </summary>
-	public class CompletionResult
+	public class CompletionResponse
 	{
 		/// <summary>
 		/// The identifier of the result, which may be used during troubleshooting

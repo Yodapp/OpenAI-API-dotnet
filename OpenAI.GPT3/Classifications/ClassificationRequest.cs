@@ -11,5 +11,16 @@ namespace OpenAI.GPT3.Classifications
     /// </summary>
     public class ClassificationRequest : OpenAIRequestBase
     {
+        /*
+         * 
+         * [
+      ["A happy moment", "Positive"],
+      ["I am sad.", "Negative"],
+      ["I am feeling awesome", "Positive"]],
+    "query": "It is a raining day :(",
+    "search_model": "ada",
+    "model": "curie",
+    "labels":["Positive", "Negative", "Neutral"]
+        */
     }
 }
