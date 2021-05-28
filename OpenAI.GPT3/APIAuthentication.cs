@@ -6,7 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace OpenAI_API
+namespace OpenAI.GPT3
 {
 	/// <summary>
 	/// Represents authentication to the OpenAPI API endpoint

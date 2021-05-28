@@ -1,27 +1,28 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Security.Authentication;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace OpenAI_API
+namespace OpenAI.GPT3
 {
 	/// <summary>
 	/// The API endpoint for querying available Engines/models
 	/// </summary>
 	public class EnginesEndpoint
 	{
-		OpenAIAPI Api;
+		Api Api;
 
 		/// <summary>
-		/// Constructor of the api endpoint.  Rather than instantiating this yourself, access it through an instance of <see cref="OpenAIAPI"/> as <see cref="OpenAIAPI.Engines"/>.
+		/// Constructor of the api endpoint.  Rather than instantiating this yourself, access it through an instance of <see cref="OpenAI.GPT3"/> as <see cref="OpenAI.GPT3.Engines"/>.
 		/// </summary>
 		/// <param name="api"></param>
-		internal EnginesEndpoint(OpenAIAPI api)
+		internal EnginesEndpoint(Api api)
 		{
 			this.Api = api;
 		}
@@ -61,7 +62,7 @@ namespace OpenAI_API
 
 			if (response.IsSuccessStatusCode)
 			{
-				var engines = JsonConvert.DeserializeObject<JsonHelperRoot>(resultAsString).data;
+				var engines = JsonSerializer.Deserialize<JsonHelperRoot>(resultAsString).data;
 				return engines;
 			}
 			else
@@ -91,7 +92,7 @@ namespace OpenAI_API
 			if (response.IsSuccessStatusCode)
 			{
 				string resultAsString = await response.Content.ReadAsStringAsync();
-				var engine = JsonConvert.DeserializeObject<Engine>(resultAsString);
+				var engine = JsonSerializer.Deserialize<Engine>(resultAsString);
 				return engine;
 			}
 			else
@@ -105,9 +106,9 @@ namespace OpenAI_API
 		/// </summary>
 		private class JsonHelperRoot
 		{
-			[JsonProperty("data")]
+			[JsonPropertyName("data")]
 			public List<Engine> data { get; set; }
-			[JsonProperty("object")]
+			[JsonPropertyName("object")]
 			public string obj { get; set; }
 
 		}

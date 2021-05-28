@@ -1,8 +1,9 @@
 using NUnit.Framework;
 using System;
 using System.IO;
+using OpenAI.GPT3;
 
-namespace OpenAI_Tests
+namespace OpenAI.GPT3.Tests
 {
 	public class AuthTests
 	{
@@ -17,7 +18,7 @@ namespace OpenAI_Tests
 		[Test]
 		public void GetAuthFromEnv()
 		{
-			var auth = OpenAI_API.APIAuthentication.LoadFromEnv();
+			var auth = APIAuthentication.LoadFromEnv();
 			Assert.IsNotNull(auth);
 			Assert.IsNotNull(auth.ApiKey);
 			Assert.IsNotEmpty(auth.ApiKey);
@@ -27,7 +28,7 @@ namespace OpenAI_Tests
 		[Test]
 		public void GetAuthFromFile()
 		{
-			var auth = OpenAI_API.APIAuthentication.LoadFromPath();
+			var auth = APIAuthentication.LoadFromPath();
 			Assert.IsNotNull(auth);
 			Assert.IsNotNull(auth.ApiKey);
 			Assert.AreEqual("pk-test12", auth.ApiKey);
@@ -37,7 +38,7 @@ namespace OpenAI_Tests
 		[Test]
 		public void GetAuthFromNonExistantFile()
 		{
-			var auth = OpenAI_API.APIAuthentication.LoadFromPath(filename: "bad.config");
+			var auth = APIAuthentication.LoadFromPath(filename: "bad.config");
 			Assert.IsNull(auth);
 		}
 
@@ -45,8 +46,8 @@ namespace OpenAI_Tests
 		[Test]
 		public void GetDefault()
 		{
-			var auth = OpenAI_API.APIAuthentication.Default;
-			var envAuth = OpenAI_API.APIAuthentication.LoadFromEnv();
+			var auth = APIAuthentication.Default;
+			var envAuth = OpenAI.GPT3.APIAuthentication.LoadFromEnv();
 			Assert.IsNotNull(auth);
 			Assert.IsNotNull(auth.ApiKey);
 			Assert.AreEqual(envAuth.ApiKey, auth.ApiKey);
@@ -57,17 +58,17 @@ namespace OpenAI_Tests
 		[Test]
 		public void testHelper()
 		{
-			OpenAI_API.APIAuthentication defaultAuth = OpenAI_API.APIAuthentication.Default;
-			OpenAI_API.APIAuthentication manualAuth = new OpenAI_API.APIAuthentication("pk-testAA");
-			OpenAI_API.OpenAIAPI api = new OpenAI_API.OpenAIAPI();
-			OpenAI_API.APIAuthentication shouldBeDefaultAuth = api.Auth;
+			APIAuthentication defaultAuth = OpenAI.GPT3.APIAuthentication.Default;
+			APIAuthentication manualAuth = new OpenAI.GPT3.APIAuthentication("pk-testAA");
+			Api api = new Api();
+			APIAuthentication shouldBeDefaultAuth = api.Auth;
 			Assert.IsNotNull(shouldBeDefaultAuth);
 			Assert.IsNotNull(shouldBeDefaultAuth.ApiKey);
 			Assert.AreEqual(defaultAuth.ApiKey, shouldBeDefaultAuth.ApiKey);
 
-			OpenAI_API.APIAuthentication.Default = new OpenAI_API.APIAuthentication("pk-testAA");
-			api = new OpenAI_API.OpenAIAPI();
-			OpenAI_API.APIAuthentication shouldBeManualAuth = api.Auth;
+			APIAuthentication.Default = new OpenAI.GPT3.APIAuthentication("pk-testAA");
+			api = new Api();
+			OpenAI.GPT3.APIAuthentication shouldBeManualAuth = api.Auth;
 			Assert.IsNotNull(shouldBeManualAuth);
 			Assert.IsNotNull(shouldBeManualAuth.ApiKey);
 			Assert.AreEqual(manualAuth.ApiKey, shouldBeManualAuth.ApiKey);
@@ -76,7 +77,7 @@ namespace OpenAI_Tests
 		[Test]
 		public void GetKey()
 		{
-			var auth = new OpenAI_API.APIAuthentication("pk-testAA");
+			var auth = new OpenAI.GPT3.APIAuthentication("pk-testAA");
 			Assert.IsNotNull(auth.ApiKey);
 			Assert.AreEqual("pk-testAA", auth.ApiKey);
 		}
@@ -84,14 +85,14 @@ namespace OpenAI_Tests
 		[Test]
 		public void ParseKey()
 		{
-			var auth = new OpenAI_API.APIAuthentication("pk-testAA");
+			var auth = new OpenAI.GPT3.APIAuthentication("pk-testAA");
 			Assert.IsNotNull(auth.ApiKey);
 			Assert.AreEqual("pk-testAA", auth.ApiKey);
 			auth = "pk-testCC";
 			Assert.IsNotNull(auth.ApiKey);
 			Assert.AreEqual("pk-testCC", auth.ApiKey);
 
-			auth = new OpenAI_API.APIAuthentication("sk-testBB");
+			auth = new OpenAI.GPT3.APIAuthentication("sk-testBB");
 			Assert.IsNotNull(auth.ApiKey);
 			Assert.AreEqual("sk-testBB", auth.ApiKey);
 		}

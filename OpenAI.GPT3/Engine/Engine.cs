@@ -1,11 +1,11 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace OpenAI_API
+namespace OpenAI.GPT3
 {
 	/// <summary>
 	/// Represents a language model, aka Engine
@@ -15,7 +15,7 @@ namespace OpenAI_API
 		/// <summary>
 		/// The id/name of the engine
 		/// </summary>
-		[JsonProperty("id")]
+		[JsonPropertyName("id")]
 		public string EngineName { get; set; }
 
 		/// <summary>
@@ -65,13 +65,13 @@ namespace OpenAI_API
 		/// <summary>
 		/// The owner of the model as returned from the API
 		/// </summary>
-		[JsonProperty("owner")]
+		[JsonPropertyName("owner")]
 		public string Owner { get; set; }
 
 		/// <summary>
 		/// Whether the model reports itself as being ready or not.  The meaning is underspecified in the API currently.
 		/// </summary>
-		[JsonProperty("ready")]
+		[JsonPropertyName("ready")]
 		public bool? Ready { get; set; }
 
 		/// <summary>

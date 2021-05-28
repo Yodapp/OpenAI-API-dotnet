@@ -1,9 +1,9 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
-namespace OpenAI_API
+namespace OpenAI.GPT3
 {
 	/// <summary>
 	/// Used internally to deserialize a result from the Document Search API
@@ -13,13 +13,13 @@ namespace OpenAI_API
 		/// <summary>
 		/// The index of the document as originally supplied
 		/// </summary>
-		[JsonProperty("document")]
+		[JsonPropertyName("document")]
 		public int DocumentIndex { get; set; }
 
 		/// <summary>
 		/// The relative score of this document
 		/// </summary>
-		[JsonProperty("score")]
+		[JsonPropertyName("score")]
 		public double Score { get; set; }
 
 	}
@@ -32,7 +32,7 @@ namespace OpenAI_API
 		/// <summary>
 		/// The list of results
 		/// </summary>
-		[JsonProperty("data")]
+		[JsonPropertyName("data")]
 		public List<SearchResult> Results { get; set; }
 
 		/// <summary>

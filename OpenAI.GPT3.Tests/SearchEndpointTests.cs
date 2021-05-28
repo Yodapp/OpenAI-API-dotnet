@@ -1,23 +1,23 @@
 ﻿using NUnit.Framework;
-using OpenAI_API;
+using OpenAI.GPT3;
 using System;
 using System.IO;
 using System.Linq;
 
-namespace OpenAI_Tests
+namespace OpenAI.GPT3Tests
 {
 	public class SearchEndpointTests
 	{
 		[SetUp]
 		public void Setup()
 		{
-			OpenAI_API.APIAuthentication.Default = new OpenAI_API.APIAuthentication(Environment.GetEnvironmentVariable("TEST_OPENAI_SECRET_KEY"));
+			APIAuthentication.Default = new APIAuthentication(Environment.GetEnvironmentVariable("TEST_OPENAI_SECRET_KEY"));
 		}
 
 		[Test]
 		public void TestBasicSearch()
 		{
-			var api = new OpenAI_API.OpenAIAPI(engine: Engine.Curie);
+			var api = new Api(engine: Engine.Curie);
 
 			Assert.IsNotNull(api.Search);
 

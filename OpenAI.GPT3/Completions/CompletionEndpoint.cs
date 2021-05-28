@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using OpenAI.GPT3.GPT3.Completions;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,26 +7,27 @@ using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Security.Authentication;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace OpenAI_API
+namespace OpenAI.GPT3
 {
-	/// <summary>
-	/// Text generation is the core function of the API. You give the API a prompt, and it generates a completion. The way you “program” the API to do a task is by simply describing the task in plain english or providing a few written examples. This simple approach works for a wide range of use cases, including summarization, translation, grammar correction, question answering, chatbots, composing emails, and much more (see the prompt library for inspiration).
-	/// </summary>
-	public class CompletionEndpoint
+    /// <summary>
+    /// Text generation is the core function of the API. You give the API a prompt, and it generates a completion. The way you “program” the API to do a task is by simply describing the task in plain english or providing a few written examples. This simple approach works for a wide range of use cases, including summarization, translation, grammar correction, question answering, chatbots, composing emails, and much more (see the prompt library for inspiration).
+    /// </summary>
+    public class CompletionEndpoint
 	{
-		OpenAIAPI Api;
+		Api Api;
 		/// <summary>
 		/// This allows you to set default parameters for every request, for example to set a default temperature or max tokens.  For every request, if you do not have a parameter set on the request but do have it set here as a default, the request will automatically pick up the default value.
 		/// </summary>
 		public CompletionRequest DefaultCompletionRequestArgs { get; set; } = new CompletionRequest();
 
 		/// <summary>
-		/// Constructor of the api endpoint.  Rather than instantiating this yourself, access it through an instance of <see cref="OpenAIAPI"/> as <see cref="OpenAIAPI.Completions"/>.
+		/// Constructor of the api endpoint.  Rather than instantiating this yourself, access it through an instance of <see cref="OpenAI.GPT3"/> as <see cref="OpenAI.GPT3.Completions"/>.
 		/// </summary>
 		/// <param name="api"></param>
-		internal CompletionEndpoint(OpenAIAPI api)
+		internal CompletionEndpoint(Api api)
 		{
 			this.Api = api;
 		}
@@ -50,7 +51,7 @@ namespace OpenAI_API
 			client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Api.Auth.ApiKey);
 			client.DefaultRequestHeaders.Add("User-Agent", "okgodoit/dotnet_openai_api");
 
-			string jsonContent = JsonConvert.SerializeObject(request, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
+            string jsonContent = JsonSerializer.Serialize(request, new JsonSerializerOptions { IgnoreNullValues = true });
 			var stringContent = new StringContent(jsonContent, UnicodeEncoding.UTF8, "application/json");
 
 			var response = await client.PostAsync($"https://api.openai.com/v1/engines/{Api.UsingEngine.EngineName}/completions", stringContent);
@@ -58,7 +59,7 @@ namespace OpenAI_API
 			{
 				string resultAsString = await response.Content.ReadAsStringAsync();
 
-				var res = JsonConvert.DeserializeObject<CompletionResult>(resultAsString);
+				var res = JsonSerializer.Deserialize<CompletionResult>(resultAsString);
 				try
 				{
 					res.Organization = response.Headers.GetValues("Openai-Organization").FirstOrDefault();
@@ -165,7 +166,7 @@ namespace OpenAI_API
 			request = new CompletionRequest(request) { Stream = true };
 			HttpClient client = new HttpClient();
 
-			string jsonContent = JsonConvert.SerializeObject(request, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
+			string jsonContent = JsonSerializer.Serialize(request, new JsonSerializerOptions() { IgnoreNullValues = true });
 			var stringContent = new StringContent(jsonContent, UnicodeEncoding.UTF8, "application/json");
 
 			using (HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Post, $"https://api.openai.com/v1/engines/{Api.UsingEngine.EngineName}/completions"))
@@ -195,7 +196,7 @@ namespace OpenAI_API
 							else if (!string.IsNullOrWhiteSpace(line))
 							{
 								index++;
-								var res = JsonConvert.DeserializeObject<CompletionResult>(line.Trim());
+								var res = JsonSerializer.Deserialize<CompletionResult>(line.Trim());
 								try
 								{
 									res.Organization = response.Headers.GetValues("Openai-Organization").FirstOrDefault();
@@ -243,7 +244,7 @@ namespace OpenAI_API
 			request = new CompletionRequest(request) { Stream = true };
 			HttpClient client = new HttpClient();
 
-			string jsonContent = JsonConvert.SerializeObject(request, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
+			string jsonContent = JsonSerializer.Serialize(request, new JsonSerializerOptions() { IgnoreNullValues = true });
 			var stringContent = new StringContent(jsonContent, UnicodeEncoding.UTF8, "application/json");
 
 			using (HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Post, $"https://api.openai.com/v1/engines/{Api.UsingEngine.EngineName}/completions"))
@@ -270,7 +271,7 @@ namespace OpenAI_API
 							}
 							else if (!string.IsNullOrWhiteSpace(line))
 							{
-								var res = JsonConvert.DeserializeObject<CompletionResult>(line.Trim());
+								var res = JsonSerializer.Deserialize<CompletionResult>(line.Trim());
 								yield return res;
 							}
 						}

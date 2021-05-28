@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using OpenAI.GPT3.Searches;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,12 +7,12 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OpenAI_API
+namespace OpenAI.GPT3
 {
-	/// <summary>
-	/// Entry point to the OpenAPI API, handling auth and allowing access to the various API endpoints
-	/// </summary>
-	public class OpenAIAPI
+    /// <summary>
+    /// Entry point to the OpenAPI API, handling auth and allowing access to the various API endpoints
+    /// </summary>
+    public class Api
 	{
 		/// <summary>
 		/// The API authentication information to use for API calls
@@ -29,7 +29,7 @@ namespace OpenAI_API
 		/// </summary>
 		/// <param name="apiKeys">The API authentication information to use for API calls, or <see langword="null"/> to attempt to use the <see cref="APIAuthentication.Default"/>, potentially loading from environment vars or from a config file.</param>
 		/// <param name="engine">The <see cref="Engine"/>/model to use for API calls, defaulting to <see cref="Engine.Davinci"/> if not specified.</param>
-		public OpenAIAPI(APIAuthentication apiKeys = null, Engine engine = null)
+		public Api(APIAuthentication apiKeys = null, Engine engine = null)
 		{
 			this.Auth = apiKeys.ThisOrDefault();
 			this.UsingEngine = engine ?? Engine.Default;
